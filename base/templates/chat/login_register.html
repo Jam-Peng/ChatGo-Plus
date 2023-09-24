@@ -1,0 +1,99 @@
+{% extends 'main.html' %}
+<!--  -->
+{% block title %} ChatRound {% endblock title %}
+<!--  -->
+
+{% block content %}
+<section>
+  <!-- 登入 -->
+  {% if page == 'login' %}
+  <div class="py-2 sm:py-8 flex justify-center">
+    <div
+      class="w-11/12 sm:w-4/12 border border-gray-800 rounded-lg overflow-hidden"
+    >
+      <div class="bg-form-title">
+        <div class="text-center text-gray-200">
+          <span>ChatGo+</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col space-y-2 bg-form-body">
+        <span class="text-center text-gray-800 text-lg">登入</span>
+        <span class="text-center text-rose-500">{{login_message}}</span>
+        <form class="text-gray-800 space-y-4" action="" method="POST">
+          {% csrf_token %}
+
+          <div>
+            <label>帳號</label>
+            <input type="text" name="username" class="input-form" />
+          </div>
+
+          <div>
+            <label>密碼</label>
+            <input type="password" name="password" class="input-form" />
+          </div>
+
+          <button class="btn-md btn-in">登入</button>
+        </form>
+        <div class="flex flex-row items-center justify-center space-x-2 pt-2">
+          <span>尚未註冊？</span>
+          <a href="{% url 'register' %}">
+            <span class="text-indigo-500">註冊</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <!-- 註冊 -->
+  <div class="py-2 sm:py-8 flex justify-center">
+    <div
+      class="w-11/12 sm:w-4/12 border border-gray-800 rounded-lg overflow-hidden"
+    >
+      <div class="bg-form-title">
+        <div class="text-center text-gray-200">
+          <span>ChatGo+</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col space-y-2 bg-form-body">
+        <span class="text-center text-gray-800 text-lg">註冊帳號</span>
+        <span class="text-center text-rose-500">{{register_message}}</span>
+        <form class="text-gray-800 space-y-4" action="" method="POST">
+          {% csrf_token %}
+
+          <div>
+            <label>帳號</label>
+            <input type="text" name="username" class="input-form" />
+          </div>
+
+          <div>
+            <label>Email</label>
+            <input type="email" name="email" class="input-form" />
+          </div>
+
+          <div>
+            <label>密碼</label>
+            <input type="password" name="password1" class="input-form" />
+          </div>
+
+          <div>
+            <label>確認密碼</label>
+            <input type="password" name="password2" class="input-form" />
+          </div>
+
+          <button class="btn-md btn-in">註冊</button>
+        </form>
+        <div class="flex flex-row items-center justify-center space-x-2 pt-2">
+          <span>已註冊？</span>
+          <a href="{% url 'login' %}">
+            <span class="text-indigo-500">登入</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</section>
+{% endblock content %}

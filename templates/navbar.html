@@ -1,0 +1,27 @@
+{% load static %}
+
+<section class="border">
+  <div class="flex items-center justify-between px-6 py-4">
+    <div>
+      <a
+        href="{% url 'home' %}"
+        class="flex items-center space-x-2 mx-0 sm:mx-4"
+      >
+        <img src="{% static 'images/logo.png' %}" class="w-9" />
+        <span class="hidden sm:block text-lg">ChatGo+</span>
+      </a>
+    </div>
+
+    <div class="flex items-center">
+      {% if request.user.is_authenticated %}
+      <div>
+        <a href="{% url 'logout' %}" class="btn-md btn-in">登出</a>
+      </div>
+      {% else %}
+      <div>
+        <a href="{% url 'login' %}" class="btn-md btn-in">登入</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

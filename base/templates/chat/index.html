@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+<!--  -->
+{% block title %} ChatRound {% endblock title %}
+<!--  -->
+
+{% block content %}
+<section>
+  <div>
+    <span class="text-lg text-green-500">首頁內容</span>
+  </div>
+
+  <div class="sm:grid grid-cols-3 gap-4 py-12 px-8 border">
+    <div class="grid grid-cols-1">
+      <div class="text-rose-600 flex justify-center">
+        <i class="material-icons text-[2.5rem]"> textsms </i>
+      </div>
+
+      <div class="flex flex-col items-center">
+        <span class="text-lg text-gray-800">聊天室的主題</span>
+        <p class="text-gray-500">聊天</p>
+      </div>
+    </div>
+
+    <!--  -->
+  </div>
+</section>
+<!--  -->
+{% endblock content %}
