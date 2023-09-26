@@ -37,4 +37,7 @@
   .bg-form-body {
     @apply bg-gray-200 px-10 py-4;
   }
+  .rooms-border {
+    @apply border rounded-lg border-gray-800 py-8 px-8;
+  }
 }

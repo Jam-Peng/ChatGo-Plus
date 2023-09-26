@@ -13,8 +13,15 @@ class User(AbstractUser):
 
 
 class Room(models.Model):
+    host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
+    participants = models.ManyToManyField(User, related_name='participants', blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-updated', '-created']
 
     def __str__(self):
         return str(self.name)
@@ -24,10 +31,11 @@ class Message(models.Model):
     room = models.ForeignKey(Room, related_name='messages', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='messages', on_delete=models.CASCADE)
     content = models.TextField()
-    date_added = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['date_added']
+        ordering = ['updated', 'created']  
     
     def __str__(self):
         return self.content[:50]  

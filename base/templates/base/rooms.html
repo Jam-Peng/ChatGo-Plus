@@ -1,0 +1,48 @@
+{% extends 'main.html' %}
+<!--  -->
+{% block title %} 聊天室 {% endblock title %}
+<!--  -->
+
+{% block content %}
+<section>
+  <div class="py-2 sm:py-8 flex justify-center">
+    <div
+      class="w-11/12 sm:w-full border border-gray-800 rounded-lg overflow-hidden"
+    >
+      <div class="py-2 px-4 bg-orange-400">
+        <div class="flex items-center space-x-2">
+          <a href="{% url 'home' %}" class="flex">
+            <i class="material-icons text-[1.4rem]"> dashboard </i>
+          </a>
+          <span>回首頁</span>
+        </div>
+      </div>
+
+      <div class="">
+        <div class="grid sm:grid-cols-3 gap-4 p-4">
+          {% for room in rooms %}
+          <div class="rooms-border">
+            <div class="grid grid-cols-1 gap-4">
+              <div class="flex flex-col">
+                <span class="text-lg">{{room.name}}</span>
+                <div class="flex items-center justify-between">
+                  <span class="text-indigo-500">房主: {{room.host}}</span>
+                  <span class="text-gray-500 text-sm">
+                    {{room.created|timesince}} 前
+                  </span>
+                </div>
+              </div>
+              <div>
+                <a href="{% url 'room' room.slug%}" class="btn-md btn-in"
+                  >參與</a
+                >
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

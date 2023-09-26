@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# 使用內建登出功能
+LOGOUT_REDIRECT_URL = '/'  
+
 
 # Application definition
 
