@@ -1,21 +1,14 @@
-{% extends 'main.html' %}
-<!--  -->
-{% block title %} 社群論壇 {% endblock title %}
-<!--  -->
-
-{% block content %}
 <section>
-  <div class="py-2 sm:py-8 flex justify-center">
-    <div
-      class="w-11/12 sm:w-full border border-gray-800 rounded-lg overflow-hidden"
-    >
-      <div class="py-2 px-4 bg-orange-400">
-        <div class="flex items-center space-x-2">
-          <a href="{% url 'home' %}" class="flex">
-            <i class="material-icons text-[1.4rem]"> dashboard </i>
-          </a>
-          <span>回首頁</span>
-        </div>
+  <div class="flex flex-col space-y-4 py-4 px-6">
+    <div class="flex flex-row justify-end">
+      <a href="" class="btn-md btn-in flex items-center justify-center">
+        <i class="material-icons flex"> add </i>
+        <span>新增社群</span>
+      </a>
+    </div>
+    <div class="border border-gray-800 rounded-lg overflow-hidden">
+      <div class="py-2 px-6 bg-orange-400">
+        <span>共享社群</span>
       </div>
 
       <div class="">
@@ -45,4 +38,3 @@
     </div>
   </div>
 </section>
-{% endblock content %}

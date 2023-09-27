@@ -165,7 +165,7 @@
                   <div class="space-x-2">
                     <span class="text-orange-400"> ${data.username} </span>
                     <span class="text-gray-500 text-sm">
-                      ${data.room}
+                      ${data.messagecreated}
                     </span>
                   </div>
 
@@ -181,7 +181,7 @@
                       <div class="space-x-2">
                         <span class="text-indigo-500"> ${data.username} </span>
                         <span class="text-gray-500 text-sm">
-                          ${data.room}
+                          ${data.messagecreated}
                         </span>
                       </div>
 
@@ -207,10 +207,17 @@
     const messageInputDom = document.querySelector("#chat-message-input");
     const message = messageInputDom.value;
 
+    // 新增時間格式 - 將日期時間轉換為ISO字符串
+    const currentDateTime = new Date();
+    currentDateTime.setHours(currentDateTime.getHours() + 8);
+    const messageCreated = currentDateTime.toISOString();
+
     // console.log({
     //   message: message,
     //   username: userName,
     //   room: roomName,
+    //   roomhost: roomHost,
+    //   messageCreated: messageCreated,
     // });
 
     // 透過chatSocket將資料傳送到瀏覽器上
@@ -220,6 +227,7 @@
         username: userName,
         room: roomName,
         roomhost: roomHost,
+        messagecreated: messageCreated,
       })
     );
 

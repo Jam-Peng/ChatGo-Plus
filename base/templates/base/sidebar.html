@@ -1,0 +1,94 @@
+<section>
+  <div class="py-4 px-4 space-y-4">
+    <div class="">
+      <form action="" method="GET">
+        <div class="relative flex flex-wrap justify-center">
+          <button
+            class="flex items-center rounded-l bg-gray-200 pl-2 py-1.5"
+            type="submit"
+          >
+            <i class="material-icons text-xl"> search </i>
+          </button>
+
+          <input
+            name="q"
+            type="text"
+            class="placeholder:text-[0.9rem] bg-gray-200 focus:outline-none rounded-r px-1 w-10/12"
+            placeholder="搜尋好友..."
+          />
+        </div>
+      </form>
+    </div>
+
+    <div class="sm:px-1">
+      <ul class="space-y-4">
+        <li class="text-indigo-500 block sm:hidden">
+          <div class="flex items-center justify-between">
+            <a href="{% url 'rooms' %}">
+              <span> 共享社群 </span>
+            </a>
+          </div>
+        </li>
+
+        {% for match_friend in match_friends %}
+        <li>
+          {% if not match_friend in friends %}
+          <div class="flex items-center justify-between">
+            <span class="hover:text-indigo-500 cursor-pointer"
+              >{{match_friend}}</span
+            >
+            <form action="" method="POST" class="flex">
+              {% csrf_token %}
+              <input
+                type="hidden"
+                name="friend_id"
+                value="{{ match_friend.id }}"
+              />
+              <button type="submit">
+                <i
+                  class="material-icons flex text-gray-500 hover:text-indigo-500"
+                >
+                  group_add
+                </i>
+              </button>
+            </form>
+          </div>
+          {% endif %}
+        </li>
+        {% endfor %}
+
+        <!-- 判斷使用者是否登入 -->
+        {% if request.user.is_authenticated %}
+        <li>
+          <div class="flex items-center justify-between">
+            <a href="{% url 'user-profile' request.user.id %}">
+              <span class="text-indigo-500">{{request.user}}</span>
+            </a>
+          </div>
+        </li>
+        {% endif %}
+
+        <div>
+          <div class="text-sm text-gray-500">
+            <span>好友</span>
+            <span>{{friends.count}} </span>
+          </div>
+          {% for friend in friends %}
+          <li>
+            <div class="flex items-center justify-between">
+              <a href="">
+                <span class="text-indigo-500">{{friend}}</span>
+              </a>
+              <a href="">
+                <span class="text-gray-500 hover:text-indigo-500">
+                  <i class="material-icons flex"> sms </i>
+                </span>
+              </a>
+            </div>
+          </li>
+          {% endfor %}
+        </div>
+      </ul>
+    </div>
+  </div>
+</section>

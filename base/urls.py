@@ -12,4 +12,6 @@ urlpatterns=[
 
     path('rooms/', views.rooms, name='rooms'),
     path('room/<slug:slug>/', views.room, name='room'),
+
+    path('profile/<str:pk>/',views.userProfile, name='user-profile'),
 ]

@@ -11,13 +11,12 @@
 
     <div>
       {% if request.user.is_authenticated %}
-      <div class="grid grid-cols-2 grid-rows-1 gap-x-4 sm:gap-x-4">
-        <div class="flex items-center justify-end">
-          <a href="{% url 'rooms' %}" class="text-indigo-500">聊天室</a>
-        </div>
+      <div class="grid grid-cols-1 gap-x-4 sm:gap-x-4">
         <div class="flex items-center space-x-2">
           <div>
-            <span>{{request.user}}</span>
+            <a href="">
+              <span class="text-indigo-500">{{request.user}}</span>
+            </a>
           </div>
 
           <a href="{% url 'logout' %}" class="btn-md btn-in">登出</a>

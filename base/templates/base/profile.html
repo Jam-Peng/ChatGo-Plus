@@ -1,20 +1,20 @@
 {% extends 'main.html' %}
 <!--  -->
-{% block title %} 首頁 {% endblock title %}
+{% block title %} 個人管理 {% endblock title %}
 <!--  -->
 
 {% block content %}
 
 <section>
   <div class="sm:grid grid-cols-12">
-    <div class="sm:col-span-3">
+    <div class="hidden sm:block sm:col-span-3">
       <!--  -->
       {% include 'base/sidebar.html' %}
     </div>
 
-    <div class="hidden sm:block col-span-9">
+    <div class="sm:col-span-9">
       <!--  -->
-      {% include 'base/rooms_component.html' %}
+      個人管理頁面
     </div>
   </div>
 </section>

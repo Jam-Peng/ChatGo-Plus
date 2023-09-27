@@ -2,6 +2,15 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 from .models import Room, Message, User
+from datetime import datetime
+
+
+# 序列化函式
+def datetime_to_json(obj):
+    if isinstance(obj, datetime):
+        # return obj.isoformat()              # 格式化 iso
+        return obj.strftime('%H:%M')          # 格式化只取時間和分鐘
+    raise TypeError("Type not serializable")
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -34,6 +43,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = data['message']
         roomhost = data['roomhost']
 
+        # 將時間轉換成字串
+        messagecreated_str = data['messagecreated'].rstrip('Z')
+        messagecreated_format = datetime.fromisoformat(messagecreated_str)
+        # 序列化時間格式
+        messagecreated_json = datetime_to_json(messagecreated_format)
+
+
         # 將發訊者傳出的資料傳到資料庫(再傳到群組聊天室給其他參與者前)
         await self.save_message(username, room, message, )
 
@@ -45,7 +61,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'username': username,
                 'room': room,
                 'message': message,
-                'roomhost':roomhost.strip(),
+                'roomhost': roomhost.strip(),
+                'messagecreated': messagecreated_json
             }
         )
 
@@ -56,6 +73,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         room = event['room']
         message = event['message']
         roomhost = event['roomhost']
+        messagecreated = event['messagecreated']
 
         # 傳送訊息到 WebSocket
         await self.send(text_data=json.dumps({
@@ -63,6 +81,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'room': room,
             'message': message,
             'roomhost': roomhost,
+            'messagecreated': messagecreated,
         }))
 
     # 處理與資料庫資料的 CRUD
@@ -80,3 +99,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
             Message.objects.filter(id__in=messages_to_delete).delete()
             
         Message.objects.create(user=user, room=room, content=message)
+        
