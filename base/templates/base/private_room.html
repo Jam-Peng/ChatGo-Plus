@@ -1,0 +1,251 @@
+{% extends 'main.html' %}
+<!--  -->
+{% block title %} 與 {{ room.name }} 私人空間{% endblock title %}
+<!--  -->
+
+{% block content %}
+<div class="sm:grid grid-cols-12">
+  <div class="hidden sm:block sm:col-span-3">
+    <!-- 左側sidebar -->
+    {% include 'base/sidebar.html' %}
+  </div>
+
+  <div class="flex justify-center sm:col-span-9 py-4 space-y-4">
+    <!-- 右側私人聊天室 -->
+    <div class="w-11/12 sm:w-9/12">
+      <div class="border border-gray-500 rounded-lg overflow-hidden">
+        <div
+          class="bg-form-title text-gray-100 flex items-center justify-between"
+        >
+          <div class="flex items-center space-x-2">
+            <a href="{% url 'home' %}" class="flex">
+              <i class="material-icons text-[1.4rem]"> logout </i>
+            </a>
+            <h3>退出聊天室</h3>
+          </div>
+          <div>
+            {% if request.user == room.host %}
+            <a href="{% url 'delete-room' room.slug %}">
+              <i class="material-icons text-gray-100/50 flex"> clear </i>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+
+        <div>
+          <div class="p-4">
+            <div class="flex items-center justify-between">
+              <span class="text-lg"> {{room.name}} </span>
+              <span class="text-gray-500 text-sm">
+                {% if last_message_time %}
+                <!--  -->
+                {{ last_message_time|date:"Y-m-d H:i" }}
+                <!--  -->
+                {% else %}
+                <!--  -->
+                {{ room.created|date:"Y-m-d H:i" }}
+                <!--  -->
+                {% endif %}
+              </span>
+            </div>
+            <div class="space-x-1">
+              <span class="text-[.88rem] text-gray-500">主持人</span>
+              <span class="text-indigo-500">{{room.host.username}}</span>
+            </div>
+          </div>
+
+          <div class="">
+            <div
+              class="p-4 sm:px-6 sm:py-2 border rounded-t-lg relative overflow-y-auto h-[420px] sm:h-[562px] bg-gray-200"
+              id="private-chat-messages"
+            >
+              <!-- 留言區 -->
+
+              <div class="space-y-2">
+                {% for message in messages %}
+                <!--  -->
+                {% if message.user != message.room.host %}
+                <div class="flex flex-col">
+                  <div class="space-x-2">
+                    <span class="text-orange-400"> {{message.user}} </span>
+                    <span class="text-gray-500 text-sm">
+                      {{message.created|time:"H:i"}}
+                    </span>
+                  </div>
+
+                  <div>{{message.content}}</div>
+                </div>
+                {% else %}
+                <div class="flex items-center justify-end">
+                  <div class="flex flex-col">
+                    <div class="space-x-2">
+                      <span class="text-indigo-500"> {{message.user}} </span>
+                      <span class="text-gray-500 text-sm">
+                        {{message.created|time:"H:i"}}
+                      </span>
+                    </div>
+
+                    <div>{{message.content}}</div>
+                  </div>
+                </div>
+                {% endif %}
+                <!--  -->
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- 使用者登入才可留言 -->
+            {% if request.user.is_authenticated %}
+            <div class="relative overflow-hidden">
+              <form action="" method="POST">
+                {% csrf_token %}
+                <div class="relative flex w-full flex-wrap items-center">
+                  <input
+                    id="private-message-input"
+                    type="text"
+                    name="content"
+                    placeholder="輸入訊息 ..."
+                    class="w-full focus:outline-none pl-12 py-2 text-slate-800"
+                  />
+                  <button
+                    id="private-message-submit"
+                    type="submit"
+                    class="absolute z-30 left-4 text-indigo-500"
+                  >
+                    <i class="material-icons text-[1.4rem] flex"> send </i>
+                  </button>
+                </div>
+              </form>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  -->
+{% endblock content %}
+
+<!-- 使用 Javascript 撰寫 WebSocket  -->
+{% block scripts %}
+<!-- 取得聊天室的號碼 -->
+{{ room.slug|json_script:"json-roomname" }}
+<!-- 取得使用者 -->
+{{ request.user.username|json_script:"json-username" }}
+
+<!-- 取得主持人JSON格式 -->
+{% if room.host %}
+<script id="json-roomhost" type="application/json">
+  {{ room.host.username|escapejs }}
+</script>
+{% endif %}
+
+<script>
+  // 取得特定聊天室的名稱
+  const roomName = JSON.parse(
+    document.getElementById("json-roomname").textContent
+  );
+  // 取得使用者的名稱
+  const userName = JSON.parse(
+    document.getElementById("json-username").textContent
+  );
+  // 主持人名稱，如果有主持人的話
+  const roomHost = document.getElementById("json-roomhost").textContent;
+
+  const chatSocket = new WebSocket(
+    "ws://" + window.location.host + "/ws/" + roomName + "/"
+  );
+
+  // 監聽訊息
+  chatSocket.onmessage = function (e) {
+    // 解析JSON格式的訊息，渲染在html結構上
+    const data = JSON.parse(e.data);
+    console.log("onmessage");
+    console.log(data);
+
+    let str = "";
+    if (data.username !== data.roomhost) {
+      const html = `<div class="flex flex-col">
+                  <div class="space-x-2">
+                    <span class="text-orange-400"> ${data.username} </span>
+                    <span class="text-gray-500 text-sm">
+                      ${data.messagecreated}
+                    </span>
+                  </div>
+
+                  <div>${data.message}</div>
+                </div>`;
+      str += html;
+      document.querySelector("#private-chat-messages").innerHTML += str;
+      scrollToBottom();
+    } else {
+      const html = `<div class="flex items-center justify-end">
+                    <div class="flex flex-col">
+                      <div class="space-x-2">
+                        <span class="text-indigo-500"> ${data.username} </span>
+                        <span class="text-gray-500 text-sm">
+                          ${data.messagecreated}
+                        </span>
+                      </div>
+
+                      <div>${data.message}</div>
+                    </div>
+                  </div>`;
+
+      str += html;
+      document.querySelector("#private-chat-messages").innerHTML += str;
+      scrollToBottom();
+    }
+  };
+
+  // 監聽關閉
+  chatSocket.onclose = function (e) {
+    console.log("onclose");
+  };
+
+  // 取得訊息表單的內容發送JAON格式訊息
+  document.querySelector("#private-message-submit").onclick = function (e) {
+    e.preventDefault();
+
+    const messageInputDom = document.querySelector("#private-message-input");
+    const message = messageInputDom.value;
+
+    // 新增時間格式 - 將日期時間轉換為ISO字符串
+    const currentDateTime = new Date();
+    currentDateTime.setHours(currentDateTime.getHours() + 8);
+    const messageCreated = currentDateTime.toISOString();
+
+    // console.log({
+    //   message: message,
+    //   username: userName,
+    //   room: roomName,
+    //   roomhost: roomHost,
+    //   messageCreated: messageCreated,
+    // });
+
+    // 透過chatSocket將資料傳送到瀏覽器上
+    chatSocket.send(
+      JSON.stringify({
+        message: message,
+        username: userName,
+        room: roomName,
+        roomhost: roomHost,
+        messagecreated: messageCreated,
+      })
+    );
+
+    messageInputDom.value = "";
+
+    return false;
+  };
+
+  // 當新增新的訊息時，會自動滾動滑桿到最底部
+  function scrollToBottom() {
+    let chatMessages = document.getElementById("private-chat-messages");
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+  scrollToBottom();
+  // END
+</script>
+{% endblock %}

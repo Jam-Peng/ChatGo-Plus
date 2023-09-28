@@ -1,6 +1,6 @@
 <section>
-  <div class="py-4 px-4 space-y-4">
-    <div class="">
+  <div class="py-4 px-4">
+    <div class="pb-2">
       <form action="" method="GET">
         <div class="relative flex flex-wrap justify-center">
           <button
@@ -20,7 +20,7 @@
       </form>
     </div>
 
-    <div class="sm:px-1">
+    <div class="p-4 sm:px-2 relative overflow-y-auto h-[650px]">
       <ul class="space-y-4">
         <li class="text-indigo-500 block sm:hidden">
           <div class="flex items-center justify-between">
@@ -34,9 +34,11 @@
         <li>
           {% if not match_friend in friends %}
           <div class="flex items-center justify-between">
-            <span class="hover:text-indigo-500 cursor-pointer"
-              >{{match_friend}}</span
-            >
+            <a href="{% url 'user-profile' match_friend.id %}">
+              <span class="hover:text-indigo-500 cursor-pointer">
+                {{match_friend}}
+              </span>
+            </a>
             <form action="" method="POST" class="flex">
               {% csrf_token %}
               <input
@@ -44,6 +46,7 @@
                 name="friend_id"
                 value="{{ match_friend.id }}"
               />
+              {% if request.user.is_authenticated %}
               <button type="submit">
                 <i
                   class="material-icons flex text-gray-500 hover:text-indigo-500"
@@ -51,6 +54,7 @@
                   group_add
                 </i>
               </button>
+              {% endif %}
             </form>
           </div>
           {% endif %}
@@ -68,22 +72,29 @@
         </li>
         {% endif %}
 
-        <div>
+        <div class="space-y-2">
           <div class="text-sm text-gray-500">
             <span>好友</span>
             <span>{{friends.count}} </span>
           </div>
+
           {% for friend in friends %}
           <li>
             <div class="flex items-center justify-between">
-              <a href="">
+              <a href="{% url 'user-profile' friend.id %}">
                 <span class="text-indigo-500">{{friend}}</span>
               </a>
-              <a href="">
-                <span class="text-gray-500 hover:text-indigo-500">
+
+              <form action="{% url 'create-room' %}" method="POST" class="flex">
+                {% csrf_token %}
+                <input type="hidden" name="friend_id" value="{{ friend.id }}" />
+                <button
+                  type="submit"
+                  class="text-gray-400 hover:text-indigo-500"
+                >
                   <i class="material-icons flex"> sms </i>
-                </span>
-              </a>
+                </button>
+              </form>
             </div>
           </li>
           {% endfor %}

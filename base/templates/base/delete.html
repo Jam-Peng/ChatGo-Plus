@@ -1,0 +1,43 @@
+{% extends 'main.html' %}
+<!--  -->
+{% block title %} ChatGo - 刪除 {% endblock title %}
+
+<!--  -->
+{% block content %}
+
+<section>
+  <div class="py-2 sm:py-8 flex justify-center">
+    <div
+      class="w-11/12 sm:w-5/12 border border-gray-500 rounded-lg overflow-hidden"
+    >
+      <div class="bg-form-title text-gray-100">
+        <div class="flex items-center space-x-2">
+          <a href="{{request.META.HTTP_REFERER}}" class="flex">
+            <i class="material-icons text-[1.3rem]"> west </i>
+          </a>
+          <span>回上頁</span>
+        </div>
+      </div>
+
+      <div class="px-4 py-6 space-y-2 bg-gray-200">
+        <form action="" method="POST">
+          {% csrf_token %}
+
+          <div class="flex flex-col space-y-4">
+            <div>
+              <span>確定要刪除 " {{obj}} " 聊天室？</span>
+            </div>
+            <div class="text-end">
+              <input
+                class="btn-md btn-in cursor-pointer"
+                type="submit"
+                value="確定"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

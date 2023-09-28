@@ -7,7 +7,8 @@ class User(AbstractUser):
     name = models.CharField(max_length=200, null=True)
     email = models.EmailField(unique=True, null=True)
     friends = models.ManyToManyField("self", through='Friendship', symmetrical=False)
-    # avatar = models.ImageField(null=True, default='avatar.svg')
+    bio = models.TextField(null=True)
+    avatar = models.ImageField(null=True, default='avatar.png')
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
@@ -16,9 +17,9 @@ class User(AbstractUser):
 class Friendship(models.Model):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_friend_set')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_friend_set')
-    chat_count = models.PositiveIntegerField(default=0)  # 聊天次數
-    created = models.DateTimeField(auto_now_add=True)    # 創建時間
-    updated = models.DateTimeField(auto_now=True)        # 更新時間
+    chat_count = models.PositiveIntegerField(default=0)     # 聊天次數
+    created = models.DateTimeField(auto_now_add=True)       # 創建時間
+    updated = models.DateTimeField(auto_now=True)           # 更新時間
 
     class Meta:
         unique_together = ['from_user', 'to_user']
@@ -32,7 +33,9 @@ class Room(models.Model):
     host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
+    description = models.TextField(null=True, blank=True)
     participants = models.ManyToManyField(User, related_name='participants', blank=True)
+    is_public = models.BooleanField(default=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 

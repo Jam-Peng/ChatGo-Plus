@@ -1,0 +1,101 @@
+{% extends 'main.html' %}
+<!--  -->
+{% block title %} 更新個人設定 {% endblock title %}
+<!--  -->
+
+{% block content %}
+<section>
+  <div class="py-2 sm:py-8 flex justify-center">
+    <div
+      class="w-11/12 sm:w-5/12 border border-gray-800 rounded-lg overflow-hidden"
+    >
+      <div class="bg-form-title text-gray-200">
+        <div class="flex items-center space-x-2">
+          <a href="{% url 'home' %}" class="flex">
+            <i class="material-icons"> west </i>
+          </a>
+          <span>回首頁</span>
+        </div>
+      </div>
+
+      <div class="bg-form-body">
+        <form
+          class="space-y-4"
+          action=""
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          {% csrf_token %}
+          <!--  -->
+
+          <div class="flex items-center space-x-2">
+            <span>目前使用的照片</span>
+            <span class="btn-md btn-in"> {{user.avatar}} </span>
+          </div>
+          <div class="flex flex-col space-y-2">
+            <label for="avatar">更新大頭照</label>
+            <input
+              id="avatar"
+              name="avatar"
+              value="{{user.avatar}}"
+              type="file"
+              class="form-input"
+            />
+          </div>
+
+          <div class="flex flex-col space-y-2">
+            <label for="name">名字</label>
+            <input
+              id="name"
+              name="name"
+              value="{{user.name}}"
+              type="text"
+              class="form-input"
+            />
+          </div>
+          <div class="flex flex-col space-y-2">
+            <label for="username">帳號</label>
+            <input
+              id="username"
+              name="username"
+              value="{{user.username}}"
+              type="text"
+              class="form-input"
+            />
+          </div>
+          <div class="flex flex-col space-y-2">
+            <label for="email">Email</label>
+            <input
+              id="email"
+              name="email"
+              value="{{user.email}}"
+              type="email"
+              class="form-input"
+            />
+          </div>
+          <div class="flex flex-col space-y-2">
+            <label for="bio">簡介</label>
+            <textarea
+              id="bio"
+              name="bio"
+              cols="30"
+              rows="10"
+              class="form-input relative overflow-y-auto h-[160px] sm:h-[100px]"
+            >
+{{user.bio}}</textarea
+            >
+          </div>
+
+          <div class="sm:py-4 flex space-x-4">
+            <a class="btn-md btn-out" href="{{request.META.HTTP_REFERER}}">
+              <span>取消</span>
+            </a>
+            <button class="btn-md btn-in" type="submit">更新</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

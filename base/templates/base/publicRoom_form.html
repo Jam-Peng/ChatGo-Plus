@@ -1,0 +1,61 @@
+{% extends 'main.html' %}
+<!--  -->
+{% block title %} ChatGo - 建立 / 更新 討論版 {% endblock title %}
+
+<!--  -->
+{% block content %}
+
+<section class="">
+  <div class="py-2 sm:py-8 flex justify-center">
+    <div
+      class="w-11/12 sm:w-6/12 border border-gray-500 rounded-lg overflow-hidden"
+    >
+      <div class="bg-form-title text-gray-100">
+        <div class="text-center">
+          <span>建立 / 更新 - 社群討論版</span>
+        </div>
+      </div>
+
+      <!-- 建立 / 更新聊天室表單 -->
+      <div class="bg-gray-200 px-4 py-6 space-y-2">
+        <form class="space-y-4" action="" method="POST">
+          {% csrf_token %}
+
+          <div class="flex flex-col space-y-2">
+            <label for="name">主題</label>
+            <input
+              id="name"
+              name="name"
+              value="{{room.name}}"
+              type="text"
+              class="form-input"
+            />
+          </div>
+
+          <div class="flex flex-col space-y-2">
+            <label for="description">內容</label>
+            <textarea
+              id="description"
+              name="description"
+              cols="30"
+              rows="5"
+              class="form-input"
+            >
+{{room.description}}</textarea
+            >
+          </div>
+
+          <div class="py-4 flex space-x-4">
+            <a class="btn-md btn-out" href="{{request.META.HTTP_REFERER}}">
+              <span>取消</span>
+            </a>
+            <button class="btn-md btn-in" type="submit">確定</button>
+          </div>
+        </form>
+        <!--  -->
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}

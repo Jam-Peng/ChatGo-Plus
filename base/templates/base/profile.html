@@ -1,20 +1,47 @@
 {% extends 'main.html' %}
 <!--  -->
-{% block title %} 個人管理 {% endblock title %}
+{% block title %} 個人管理中心 {% endblock title %}
 <!--  -->
 
 {% block content %}
 
 <section>
-  <div class="sm:grid grid-cols-12">
+  <div class="sm:grid grid-cols-12 ">
     <div class="hidden sm:block sm:col-span-3">
       <!--  -->
       {% include 'base/sidebar.html' %}
     </div>
 
-    <div class="sm:col-span-9">
+    <div class="sm:col-span-9 py-4 px-6 space-y-4">
       <!--  -->
-      個人管理頁面
+      <div class="flex flex-col items-center space-y-2">
+        <div class="border-2 rounded-full border-indigo-500 w-[7rem]">
+          <img src="{{user.avatar.url}}" class="border rounded-full" />
+        </div>
+
+        <div class="text-center space-y-2">
+          <span class="text-[1.2rem]">{{user.username}}</span>
+          {% if request.user == user%}
+          <div
+            class="btn-md btn-in"
+          >
+            <a href="{% url 'update-user' %}">
+              <span>編輯設定</span>
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="flex flex-col pt-2">
+        <span class="text-gray-500">介紹</span>
+        <span>{{user.bio}}</span>
+      </div>
+
+      <div>
+        <span class="text-gray-500 uppercase">{{user.username}} 論壇</span>
+      </div>
+    </div>
     </div>
   </div>
 </section>
