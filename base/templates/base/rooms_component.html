@@ -19,8 +19,10 @@
           {% for room in rooms %}
           <!--  -->
           {% if room.is_public == True %}
-          <div class="border border-gray-500 rounded-lg overflow-hidden">
-            <div class="grid grid-cols-1 gap-2 bg-gray-200">
+          <div
+            class="border border-gray-500 bg-gray-200 rounded-lg overflow-hidden"
+          >
+            <div class="grid grid-cols-1 gap-2">
               <div>
                 <div
                   class="public-rooms-title text-gray-100 flex items-center justify-between"
@@ -52,12 +54,12 @@
                       <span class="text-indigo-500">{{room.host}}</span>
                     </a>
                     <span class="text-gray-500 text-xs">
-                      {{room.created|date:"m-d H:i"}}
+                      {{room.created|date:"m-d"}}
                     </span>
                   </div>
 
-                  <div class="sm:truncate text-lg">
-                    <span>{{room.description}}</span>
+                  <div class="text-[1rem]">
+                    <span>{{room.description|truncatechars:30 }}</span>
                   </div>
                 </div>
 

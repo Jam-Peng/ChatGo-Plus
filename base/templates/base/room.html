@@ -1,39 +1,51 @@
 {% extends 'main.html' %}
 <!--  -->
-{% block title %} {{ room.name }}{% endblock title %}
+{% block title %} 群組 - {{ room.name }}{% endblock title %}
 <!--  -->
 
 {% block content %}
-<div class="flex justify-center sm:py-2">
-  <!-- 左側聊天室 start -->
-  <div class="w-full sm:w-9/12 space-y-4 sm:space-y-0 px-4 sm:px-3">
-    <div class="border border-gray-800 rounded-lg overflow-hidden">
-      <div class="py-2 px-4 bg-orange-400 flex items-center justify-between">
+<div class="sm:grid grid-cols-12">
+  <div class="hidden sm:block sm:col-span-3">
+    <!-- 左側 sidebar-->
+    {% include 'base/sidebar.html' %}
+  </div>
+
+  <!-- 中間聊天室 start -->
+  <div class="sm:col-span-7 p-4">
+    <div class="border border-gray-500 rounded-lg overflow-hidden">
+      <div
+        class="bg-form-title text-gray-100 flex items-center justify-between"
+      >
         <div class="flex items-center space-x-2">
           <a href="{{request.META.HTTP_REFERER}}" class="flex">
             <i class="material-icons text-[1.4rem]"> logout </i>
           </a>
-          <h3>退出聊天室</h3>
+          <h3>退出群組聊天室</h3>
         </div>
       </div>
 
       <div>
-        <div class="p-4">
-          <div class="flex items-center justify-between">
-            <span class="text-lg"> {{room.name}} </span>
-            <span class="text-gray-500 text-sm">
-              {{room.created|date:"Y-m-d H:i"}}
-            </span>
+        <div class="p-4 space-y-1">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-lg"> {{room.name}} </span>
+              <span class="text-gray-500 text-sm">
+                {{room.created|date:"Y-m-d"}}
+              </span>
+            </div>
+            <div class="space-x-1">
+              <span class="text-[.88rem] text-gray-500">房主</span>
+              <span class="text-indigo-500">{{room.host.username}}</span>
+            </div>
           </div>
-          <div class="space-x-1">
-            <span class="text-[.88rem] text-gray-500">主持人</span>
-            <span class="text-indigo-500">{{room.host.username}}</span>
+          <div class="relative overflow-y-auto h-[85px] sm:h-[80px]">
+            <span class="text-[.95rem]">{{room.description}}</span>
           </div>
         </div>
 
         <div>
           <div
-            class="p-4 sm:px-6 sm:py-2 border rounded-t-lg relative overflow-y-auto h-[420px] sm:h-[562px]"
+            class="p-4 sm:px-6 sm:py-2 border rounded-t-lg relative overflow-y-auto h-[300px] sm:h-[478px] bg-gray-200"
             id="chat-messages"
           >
             <!-- 留言區 -->
@@ -100,14 +112,17 @@
   </div>
 
   <!-- 右側參與者 -->
-  <div class="hidden sm:block w-3/12 px-4">
-    <div class="border border-gray-800 rounded-lg overflow-hidden">
-      <div class="py-2 px-4 bg-orange-400">
+  <div class="hidden sm:block sm:col-span-2 pt-4">
+    <div class="border border-gray-500 rounded-lg overflow-hidden">
+      <div class="bg-form-title text-gray-100">
         <span>參與者</span>
-        <span>({{participants.count}} 人)</span>
+        <span id="participantsCount"> {{participants.count}}</span>
       </div>
 
-      <div class="space-y-2 p-4 relative overflow-y-auto h-[687px]">
+      <div
+        class="space-y-2 p-4 relative overflow-y-auto h-[687px]"
+        id="participants-users"
+      >
         {% for user in participants %}
         <div class="flex items-center space-x-2">
           <div class="text-indigo-500">
@@ -126,6 +141,7 @@
 {% block scripts %}
 <!-- 取得聊天室的號碼 -->
 {{ room.slug|json_script:"json-roomname" }}
+
 <!-- 取得使用者 -->
 {{ request.user.username|json_script:"json-username" }}
 
@@ -157,42 +173,67 @@
     // 解析JSON格式的訊息，渲染在html結構上
     const data = JSON.parse(e.data);
     console.log("onmessage");
-    console.log(data);
+    // console.log(data);
 
     let str = "";
     if (data.username !== data.roomhost) {
       const html = `<div class="flex flex-col">
-                  <div class="space-x-2">
-                    <span class="text-orange-400"> ${data.username} </span>
-                    <span class="text-gray-500 text-sm">
-                      ${data.messagecreated}
-                    </span>
-                  </div>
-
-                  <div>${data.message}</div>
-                </div>`;
-
-      str += html;
-      document.querySelector("#chat-messages").innerHTML += str;
-      scrollToBottom();
-    } else {
-      const html = `<div class="flex items-center justify-end">
-                    <div class="flex flex-col">
                       <div class="space-x-2">
-                        <span class="text-indigo-500"> ${data.username} </span>
+                        <span class="text-orange-400"> ${data.username} </span>
                         <span class="text-gray-500 text-sm">
                           ${data.messagecreated}
                         </span>
                       </div>
 
                       <div>${data.message}</div>
-                    </div>
-                  </div>`;
+                    </div>`;
+
+      str += html;
+      document.querySelector("#chat-messages").innerHTML += str;
+      scrollToBottom();
+    } else {
+      const html = `<div class="flex items-center justify-end">
+                      <div class="flex flex-col">
+                        <div class="space-x-2">
+                          <span class="text-indigo-500"> ${data.username} </span>
+                          <span class="text-gray-500 text-sm">
+                            ${data.messagecreated}
+                          </span>
+                        </div>
+
+                        <div>${data.message}</div>
+                      </div>
+                    </div>`;
 
       str += html;
       document.querySelector("#chat-messages").innerHTML += str;
       scrollToBottom();
     }
+
+    const participantsList = document.querySelector("#participants-users");
+    const existingUser = Array.from(participantsList.children).find((child) => {
+      return child.textContent.includes(data.username);
+    });
+
+    const participantsCountElement =
+      document.querySelector("#participantsCount");
+
+    if (!existingUser) {
+      let str2 = "";
+      const html2 = `<div class="flex items-center space-x-2">
+                      <div class="text-indigo-500">
+                        <span>${data.username}</span>
+                      </div>
+                    </div>`;
+
+      str2 += html2;
+      document.querySelector("#participants-users").innerHTML += str2;
+
+      const currentCount = parseInt(participantsCountElement.textContent, 10);
+      const newCount = currentCount + 1;
+      participantsCountElement.textContent = newCount;
+    }
+    //
   };
 
   // 監聽關閉
@@ -220,6 +261,8 @@
     //   messageCreated: messageCreated,
     // });
 
+    const participants = 0;
+
     // 透過chatSocket將資料傳送到瀏覽器上
     chatSocket.send(
       JSON.stringify({
@@ -228,6 +271,7 @@
         room: roomName,
         roomhost: roomHost,
         messagecreated: messageCreated,
+        participantsCount: participants,
       })
     );
 

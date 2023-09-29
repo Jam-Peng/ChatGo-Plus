@@ -1,6 +1,6 @@
 {% extends 'main.html' %}
 <!--  -->
-{% block title %} 與 {{ room.name }} 私人空間{% endblock title %}
+{% block title %} 私人聊天室 {% endblock title %}
 <!--  -->
 
 {% block content %}
@@ -162,7 +162,7 @@
     // 解析JSON格式的訊息，渲染在html結構上
     const data = JSON.parse(e.data);
     console.log("onmessage");
-    console.log(data);
+    // console.log(data);
 
     let str = "";
     if (data.username !== data.roomhost) {
@@ -223,7 +223,7 @@
     //   roomhost: roomHost,
     //   messageCreated: messageCreated,
     // });
-
+    const participants = 0;
     // 透過chatSocket將資料傳送到瀏覽器上
     chatSocket.send(
       JSON.stringify({
@@ -232,6 +232,7 @@
         room: roomName,
         roomhost: roomHost,
         messagecreated: messageCreated,
+        participantsCount: participants,
       })
     );
 

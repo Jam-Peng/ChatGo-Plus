@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import  MyUserCreationForm, UserForm
-from .models import User, Room, Message, Friendship
+from .models import User, Room, Message
 from django.db.models import Q
 import uuid
 
@@ -11,9 +11,19 @@ import uuid
 def home(request):
     rooms = Room.objects.all()
     friends = []
+
     if request.user.is_authenticated:
         friends = request.user.friends.all()
-        
+
+        # 取得與私人聊天室中最後的訊息
+        for friend in friends:
+            private_rooms = Room.objects.filter(participants=friend).filter(participants=request.user)
+            last_message = Message.objects.filter(room__in=private_rooms).order_by('-created').first()
+            # 最後訊息內容
+            friend.last_message = last_message
+            # 最後訊息時間
+            friend.last_message_time = last_message.created if last_message else None
+            
     # 搜尋朋友功能
     q = request.GET.get('q', '')
     if q.strip():
@@ -155,7 +165,39 @@ def room(request, slug):
     messages = Message.objects.filter(room=room)
     participants = room.participants.all() 
     
-    context = {'room': room, 'messages': messages, 'participants': participants}
+    # ============= sidebar 邏輯 =============  # 
+    friends = []
+    if request.user.is_authenticated:
+        friends = request.user.friends.all()
+
+        # 取得與私人聊天室中最後的訊息
+        for friend in friends:
+            private_rooms = Room.objects.filter(participants=friend).filter(participants=request.user)
+            last_message = Message.objects.filter(room__in=private_rooms).order_by('-created').first()
+            # 最後訊息內容
+            friend.last_message = last_message
+            # 最後訊息時間
+            friend.last_message_time = last_message.created if last_message else None
+
+    # 搜尋朋友功能
+    q = request.GET.get('q', '')
+    if q.strip():
+        match_friends = User.objects.filter(
+            Q(username__icontains=q) & 
+            ~Q(username=request.user.username)    # 排除篩選出自己的帳號
+            )
+    else:
+        match_friends = [] 
+
+    # 新增好友
+    if request.method == 'POST':
+        friend_id = request.POST.get('friend_id')
+        friend = User.objects.get(id=friend_id)
+        request.user.friends.add(friend)
+        return redirect('room', slug=room.slug) 
+
+    context = {'room': room, 'messages': messages, 'participants': participants, 
+                'friends': friends, 'match_friends': match_friends,}
     return render(request, 'base/room.html', context)
 
 
@@ -241,6 +283,15 @@ def userProfile(request, pk):
     friends = []
     if request.user.is_authenticated:
         friends = request.user.friends.all()
+
+        # 取得與私人聊天室中最後的訊息
+        for friend in friends:
+            private_rooms = Room.objects.filter(participants=friend).filter(participants=request.user)
+            last_message = Message.objects.filter(room__in=private_rooms).order_by('-created').first()
+            # 最後訊息內容
+            friend.last_message = last_message
+            # 最後訊息時間
+            friend.last_message_time = last_message.created if last_message else None
 
     # 搜尋朋友功能
     q = request.GET.get('q', '')

@@ -1,5 +1,5 @@
 <section>
-  <div class="py-4 px-4">
+  <div class="p-4 px-4">
     <div class="pb-2">
       <form action="" method="GET">
         <div class="relative flex flex-wrap justify-center">
@@ -21,7 +21,7 @@
     </div>
 
     <div class="p-4 sm:px-2 relative overflow-y-auto h-[650px]">
-      <ul class="space-y-4">
+      <ul class="space-y-2">
         <li class="text-indigo-500 block sm:hidden">
           <div class="flex items-center justify-between">
             <a href="{% url 'rooms' %}">
@@ -80,21 +80,38 @@
 
           {% for friend in friends %}
           <li>
-            <div class="flex items-center justify-between">
-              <a href="{% url 'user-profile' friend.id %}">
-                <span class="text-indigo-500">{{friend}}</span>
-              </a>
-
-              <form action="{% url 'create-room' %}" method="POST" class="flex">
-                {% csrf_token %}
-                <input type="hidden" name="friend_id" value="{{ friend.id }}" />
-                <button
-                  type="submit"
-                  class="text-gray-400 hover:text-indigo-500"
+            <div class="space-y-1">
+              <div class="flex items-center justify-between">
+                <a href="{% url 'user-profile' friend.id %}">
+                  <span class="text-indigo-500">{{friend}}</span>
+                </a>
+                <form
+                  action="{% url 'create-room' %}"
+                  method="POST"
+                  class="flex"
                 >
-                  <i class="material-icons flex"> sms </i>
-                </button>
-              </form>
+                  {% csrf_token %}
+                  <input
+                    type="hidden"
+                    name="friend_id"
+                    value="{{ friend.id }}"
+                  />
+                  <button
+                    type="submit"
+                    class="text-indigo-500 hover:text-indigo-400"
+                  >
+                    <i class="material-icons flex"> sms </i>
+                  </button>
+                </form>
+              </div>
+              {% if friend.last_message %}
+              <div class="text-[0.78rem] flex justify-between text-gray-500">
+                <span>
+                  {{ friend.last_message.content|truncatechars:20 }}
+                </span>
+                <span> {{ friend.last_message_time|date:"H:i" }} </span>
+              </div>
+              {% endif %}
             </div>
           </li>
           {% endfor %}
