@@ -1,5 +1,5 @@
 <section>
-  <div class="p-4 px-4">
+  <div class="p-4">
     <div class="pb-2">
       <form action="" method="GET">
         <div class="relative flex flex-wrap justify-center">
@@ -21,19 +21,11 @@
     </div>
 
     <div class="p-4 sm:px-2 relative overflow-y-auto h-[650px]">
-      <ul class="space-y-2">
-        <li class="text-indigo-500 block sm:hidden">
-          <div class="flex items-center justify-between">
-            <a href="{% url 'rooms' %}">
-              <span> 共享社群 </span>
-            </a>
-          </div>
-        </li>
-
+      <ul>
         {% for match_friend in match_friends %}
         <li>
           {% if not match_friend in friends %}
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between mb-2">
             <a href="{% url 'user-profile' match_friend.id %}">
               <span class="hover:text-indigo-500 cursor-pointer">
                 {{match_friend}}
@@ -61,10 +53,18 @@
         </li>
         {% endfor %}
 
+        <li class="text-indigo-500 text-[0.95rem] mb-2">
+          <div class="flex items-center justify-between">
+            <a href="{% url 'rooms' %}">
+              <span> 社群討論版 </span>
+            </a>
+          </div>
+        </li>
+
         <!-- 判斷使用者是否登入 -->
         {% if request.user.is_authenticated %}
         <li>
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between mb-2">
             <a href="{% url 'user-profile' request.user.id %}">
               <span class="text-indigo-500">{{request.user}}</span>
             </a>
@@ -104,6 +104,7 @@
                   </button>
                 </form>
               </div>
+
               {% if friend.last_message %}
               <div class="text-[0.78rem] flex justify-between text-gray-500">
                 <span>

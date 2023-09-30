@@ -1,53 +1,51 @@
 <section>
   <div class="flex flex-col space-y-4 py-4 px-6">
-    <div class="flex flex-row justify-end">
+    <div class="flex flex-row items-center justify-between px-4">
+      <div class="text-[0.95rem] text-gray-500">
+        <span>社群討論</span>
+        <span class="text-indigo-500">{{rooms.count}} </span>
+      </div>
       <a
         href="{% url 'create-public-room' %}"
         class="btn-md btn-in flex items-center justify-center"
       >
         <i class="material-icons flex"> add </i>
-        <span class="text-[0.95rem]">新增討論版</span>
+        <span class="text-[0.95rem]">新增社群</span>
       </a>
     </div>
-    <div class="border border-gray-500 rounded-lg overflow-hidden">
-      <div class="bg-form-title text-gray-100">
-        <span>社群討論版</span>
-      </div>
-
+    <div class="overflow-hidden">
       <div class="relative overflow-y-auto h-[650px]">
-        <div class="grid sm:grid-cols-2 gap-4 p-6">
+        <div class="grid sm:grid-cols-2 gap-4 px-4">
           {% for room in rooms %}
           <!--  -->
           {% if room.is_public == True %}
           <div
-            class="border border-gray-500 bg-gray-200 rounded-lg overflow-hidden"
+            class="border border-gray-100 bg-gray-200 rounded-lg overflow-hidden"
           >
-            <div class="grid grid-cols-1 gap-2">
-              <div>
-                <div
-                  class="public-rooms-title text-gray-100 flex items-center justify-between"
-                >
-                  <span>{{room.name}}</span>
-                  {% if request.user == room.host %}
-                  <div class="flex space-x-1">
-                    <a
-                      href="{% url 'update-public-room' room.slug %}"
-                      class="flex hover:text-indigo-500"
-                    >
-                      <i class="material-icons text-lg"> edit </i>
-                    </a>
-                    <a
-                      href="{% url 'delete-public-room' room.slug %}"
-                      class="flex hover:text-indigo-500"
-                    >
-                      <i class="material-icons text-lg"> clear </i>
-                    </a>
-                  </div>
-                  {% endif %}
+            <div>
+              <div
+                class="public-rooms-title text-gray-100 flex items-center justify-between"
+              >
+                <span>{{room.name}}</span>
+                {% if request.user == room.host %}
+                <div class="flex space-x-1">
+                  <a
+                    href="{% url 'update-public-room' room.slug %}"
+                    class="flex hover:text-indigo-500"
+                  >
+                    <i class="material-icons text-lg"> edit </i>
+                  </a>
+                  <a
+                    href="{% url 'delete-public-room' room.slug %}"
+                    class="flex hover:text-indigo-500"
+                  >
+                    <i class="material-icons text-lg"> clear </i>
+                  </a>
                 </div>
+                {% endif %}
               </div>
 
-              <div class="p-4 space-y-4">
+              <div class="p-4 space-y-2">
                 <div class="space-y-1">
                   <div class="flex items-center justify-between">
                     <a href="{% url 'user-profile' room.host.id %}">
@@ -64,9 +62,15 @@
                 </div>
 
                 <div>
-                  <a href="{% url 'room' room.slug%}" class="btn-md btn-in"
-                    >參與</a
+                  <a
+                    href="{% url 'room' room.slug%}"
+                    class="flex items-center space-x-2 text-indigo-500 hover:text-indigo-400"
                   >
+                    <i class="material-icons text-[1.5rem] flex">
+                      people_outline
+                    </i>
+                    <span class="text-[0.95rem]"> 參與 </span>
+                  </a>
                 </div>
               </div>
             </div>

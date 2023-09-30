@@ -1,0 +1,52 @@
+<section>
+  <div class="p-4">
+    <div class="pb-4">
+      <form action="" method="GET">
+        <div class="relative flex flex-wrap justify-center">
+          <button
+            class="flex items-center rounded-l bg-gray-200 pl-2 py-1.5"
+            type="submit"
+          >
+            <i class="material-icons text-xl"> search </i>
+          </button>
+
+          <input
+            name="q"
+            type="text"
+            class="placeholder:text-[0.9rem] bg-gray-200 focus:outline-none rounded-r px-1 w-10/12"
+            placeholder="搜尋社群..."
+          />
+        </div>
+      </form>
+    </div>
+
+    <div class="pr-4 relative overflow-y-auto h-[380px]">
+      <ul class="space-y-3 text-[0.95rem]">
+        <li>
+          <div class="flex items-center justify-between">
+            <a
+              href="{% url 'rooms' %}"
+              class="text-gray-500 hover:text-indigo-500"
+            >
+              <span> 全部 </span>
+            </a>
+            <span
+              class="bg-indigo-500 border border-indigo-500 rounded-md text-gray-100 px-1.5"
+            >
+              {{rooms.count}}
+            </span>
+          </div>
+        </li>
+        {% for room in rooms %}
+        <li class="hover:text-indigo-500">
+          <div>
+            <a href="{% url 'rooms' %}?q={{room.name}}">
+              <span>{{room.name}}</span>
+            </a>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,15 +1,16 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import  MyUserCreationForm, UserForm
-from .models import User, Room, Message
+from .models import User, Room, Message, Friendship
 from django.db.models import Q
 import uuid
 
 
 def home(request):
-    rooms = Room.objects.all()
+    # rooms = Room.objects.all()
+    rooms = Room.objects.filter(is_public = True)
     friends = []
 
     if request.user.is_authenticated:
@@ -23,7 +24,7 @@ def home(request):
             friend.last_message = last_message
             # 最後訊息時間
             friend.last_message_time = last_message.created if last_message else None
-            
+
     # 搜尋朋友功能
     q = request.GET.get('q', '')
     if q.strip():
@@ -103,12 +104,17 @@ def registerPage(request):
     return render(request, 'base/login_register.html', {'form': form, 'register_message': register_message})
 
 
-# 所有聊天室頁面(手機版為主)
+# 所有聊天室頁面
 def rooms(request):
-    # rooms = Room.objects.all()
-    rooms = Room.objects.filter(is_public=True)
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
 
-    context = {'rooms': rooms}
+    rooms = Room.objects.filter(is_public=True).filter(
+        Q(host__username__icontains=q) |
+        Q(name__icontains=q) |
+        Q(description__icontains=q) 
+    )
+
+    context = {'rooms': rooms, }
     return render(request, 'base/rooms.html', context)
 
 
@@ -331,3 +337,29 @@ def updateUser(request):
     
     return render(request, 'base/update_user.html', {'form': form, 'user': user})
 
+
+def deleteFriend(request, pk):
+    if not request.user.is_authenticated:
+        return HttpResponse('沒有權限可進行刪除')
+    
+    # 第一種寫法
+    friend = User.objects.get(id=pk)
+    if request.method == 'POST':
+        # 先刪除與好友建立的聊天室
+        private_rooms = Room.objects.filter(name=friend)
+        for room in private_rooms:
+            room.delete()
+        # 在刪除好友
+        request.user.friends.remove(friend)
+
+        return redirect('home')
+    
+    # 第二種寫法
+    # friend = get_object_or_404(User, id=pk)
+    # # 檢查用戶之間是否為朋友，如果是就直接刪除它，不需要經過html直接重新導向首頁
+    # friendship = Friendship.objects.filter(from_user=request.user, to_user=friend).first()
+    # if friendship:
+    #     friendship.delete()
+    # return redirect('home')
+
+    return render(request, 'base/delete_user.html', {'obj': friend})

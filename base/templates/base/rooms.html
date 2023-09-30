@@ -5,44 +5,117 @@
 
 {% block content %}
 <section>
-  <div class="py-2 sm:py-8 flex justify-center">
-    <div
-      class="w-11/12 sm:w-full border border-gray-500 rounded-lg overflow-hidden"
-    >
-      <div class="bg-form-title text-gray-100">
-        <div class="flex items-center space-x-2">
-          <a href="{% url 'home' %}" class="flex">
-            <i class="material-icons text-[1.4rem]"> dashboard </i>
-          </a>
-          <span>回首頁</span>
-        </div>
-      </div>
+  <div class="sm:grid grid-cols-12">
+    <div class="hidden sm:block sm:col-span-3">
+      <!-- 左側 sidebar -->
+      {% include 'base/search_group_component.html' %}
+    </div>
 
-      <div class="">
-        <div class="grid sm:grid-cols-3 gap-4 p-4">
-          {% for room in rooms %}
-          <div class="rooms-border">
-            <div class="grid grid-cols-1 gap-4">
-              <div class="flex flex-col">
-                <span class="text-lg">{{room.name}}</span>
-                <div class="flex items-center justify-between">
-                  <span class="text-indigo-500">房主: {{room.host}}</span>
-                  <span class="text-gray-500 text-sm">
-                    {{room.created|timesince}} 前
-                  </span>
+    <div class="sm:col-span-9">
+      <!-- 右側 社群討論版 -->
+      <div class="flex flex-col py-4 px-4 sm:px-6">
+        <div class="sm:hidden mb-4">
+          <form action="" method="GET">
+            <div class="relative flex flex-wrap justify-center">
+              <button
+                class="flex items-center rounded-l bg-gray-200 pl-2 py-1.5"
+                type="submit"
+              >
+                <i class="material-icons text-xl"> search </i>
+              </button>
+
+              <input
+                name="q"
+                type="text"
+                class="placeholder:text-[0.9rem] bg-gray-200 focus:outline-none rounded-r px-1 w-10/12"
+                placeholder="搜尋社群..."
+              />
+            </div>
+          </form>
+        </div>
+
+        <div class="flex flex-row items-center justify-between px-4 pb-4">
+          <span class="text-gray-500 text-[0.95rem]">社群討論</span>
+          <a
+            href="{% url 'create-public-room' %}"
+            class="btn-md btn-in flex items-center justify-center"
+          >
+            <i class="material-icons flex"> add </i>
+            <span class="text-[0.95rem]">新增社群</span>
+          </a>
+        </div>
+
+        <div class="overflow-hidden">
+          <div class="relative overflow-y-auto h-[550px] sm:h-[650px]">
+            <div class="grid sm:grid-cols-2 gap-4 px-4">
+              {% for room in rooms %}
+              <!--  -->
+              {% if room.is_public == True %}
+              <div
+                class="border border-gray-100 bg-gray-200 rounded-lg overflow-hidden"
+              >
+                <div>
+                  <div
+                    class="public-rooms-title text-gray-100 flex items-center justify-between"
+                  >
+                    <span>{{room.name}}</span>
+                    {% if request.user == room.host %}
+                    <div class="flex space-x-1">
+                      <a
+                        href="{% url 'update-public-room' room.slug %}"
+                        class="flex hover:text-indigo-500"
+                      >
+                        <i class="material-icons text-lg"> edit </i>
+                      </a>
+                      <a
+                        href="{% url 'delete-public-room' room.slug %}"
+                        class="flex hover:text-indigo-500"
+                      >
+                        <i class="material-icons text-lg"> clear </i>
+                      </a>
+                    </div>
+                    {% endif %}
+                  </div>
+
+                  <div class="p-4 space-y-2">
+                    <div class="space-y-1">
+                      <div class="flex items-center justify-between">
+                        <a href="{% url 'user-profile' room.host.id %}">
+                          <span class="text-indigo-500">{{room.host}}</span>
+                        </a>
+                        <span class="text-gray-500 text-xs">
+                          {{room.created|date:"m-d"}}
+                        </span>
+                      </div>
+
+                      <div class="text-[1rem]">
+                        <span>{{room.description|truncatechars:30 }}</span>
+                      </div>
+                    </div>
+
+                    <div>
+                      <a
+                        href="{% url 'room' room.slug%}"
+                        class="flex items-center space-x-2 text-indigo-500 hover:text-indigo-400"
+                      >
+                        <i class="material-icons text-[1.5rem] flex">
+                          people_outline
+                        </i>
+                        <span class="text-[0.95rem]">參與</span>
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div>
-                <a href="{% url 'room' room.slug%}" class="btn-md btn-in"
-                  >參與</a
-                >
-              </div>
+              {% endif %}
+              <!--  -->
+              {% endfor %}
             </div>
           </div>
-          {% endfor %}
         </div>
       </div>
     </div>
   </div>
 </section>
+
 {% endblock content %}
