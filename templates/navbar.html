@@ -1,6 +1,6 @@
 {% load static %}
 
-<section class="border">
+<section class="">
   <div class="flex items-center justify-between px-4 sm:px-6 py-4">
     <div>
       <a href="{% url 'home' %}" class="flex items-center space-x-2">
@@ -9,32 +9,51 @@
       </a>
     </div>
 
-    <div>
+    <div class="sm:pr-4">
       {% if request.user.is_authenticated %}
       <div class="grid grid-cols-1 gap-x-4 sm:gap-x-4">
         <div class="flex items-center space-x-2">
-          <div>
-            <a href="">
-              <span class="text-indigo-500">{{request.user}}</span>
+          <div
+            class="border-2 rounded-full border-indigo-500 w-[2.5rem] md:w-[2.4rem]"
+          >
+            <a href="{% url 'user-profile' request.user.id %}">
+              <img
+                src="{{request.user.avatar.url}}"
+                class="border rounded-full"
+              />
             </a>
           </div>
 
-          <a href="{% url 'logout' %}" class="btn-md btn-in">登出</a>
+          <div>
+            {% if request.user.name != None %}
+            <a href="{% url 'user-profile' request.user.id %}">
+              <span class="text-indigo-500">{{request.user.name}}</span>
+            </a>
+            {% else %}
+            <a href="{% url 'user-profile' request.user.id %}">
+              <span class="text-indigo-500">{{request.user}}</span>
+            </a>
+            {% endif %}
+          </div>
         </div>
       </div>
       {% else %}
 
       <div class="flex items-center space-x-2">
-        <!-- <div
+        <div
           class="border-2 rounded-full border-indigo-400 w-[2.5rem] md:w-[2.4rem]"
         >
           <img
             src="{% static 'images/avatar.png' %}"
             class="border rounded-full"
           />
-        </div> -->
+        </div>
 
-        <a href="{% url 'login' %}" class="btn-md btn-in">登入</a>
+        <a
+          href="{% url 'login' %}"
+          class="text-indigo-500 hover:text-indigo-400"
+          >登入</a
+        >
       </div>
       {% endif %}
     </div>

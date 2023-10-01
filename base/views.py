@@ -219,7 +219,7 @@ def createPrivateRoom(request):
         if not room:
             # 建立與朋友單一聊天室
             room = Room.objects.create(
-                name = friend.username, 
+                name = friend.name or friend.username, 
                 host = request.user,
                 slug = room_slug,
                 is_public = False,
@@ -282,6 +282,8 @@ def deletePrivateRoom(request, slug):
     return render(request, 'base/delete.html', {'obj': room})
 
 
+# 使用者頁面
+@login_required(login_url='/login')
 def userProfile(request, pk):
     user = User.objects.get(id=pk)
     rooms = user.room_set.all() 

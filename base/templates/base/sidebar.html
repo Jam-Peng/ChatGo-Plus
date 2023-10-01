@@ -1,5 +1,7 @@
+{% load static %}
+
 <section>
-  <div class="p-4">
+  <div class="p-4 sm:relative sm:h-[650px] sm:overflow-auto">
     <div class="pb-2">
       <form action="" method="GET">
         <div class="relative flex flex-wrap justify-center">
@@ -20,17 +22,24 @@
       </form>
     </div>
 
-    <div class="p-4 sm:px-2 relative overflow-y-auto h-[650px]">
+    <div class="p-4 sm:px-2 relative overflow-y-auto h-[600px] sm:h-[550px]">
       <ul>
         {% for match_friend in match_friends %}
         <li>
           {% if not match_friend in friends %}
           <div class="flex items-center justify-between mb-2">
             <a href="{% url 'user-profile' match_friend.id %}">
+              {% if match_friend.name != None %}
+              <span class="hover:text-indigo-500 cursor-pointer">
+                {{match_friend.name}}
+              </span>
+              {% else %}
               <span class="hover:text-indigo-500 cursor-pointer">
                 {{match_friend}}
               </span>
+              {% endif %}
             </a>
+
             <form action="" method="POST" class="flex">
               {% csrf_token %}
               <input
@@ -53,7 +62,7 @@
         </li>
         {% endfor %}
 
-        <li class="text-indigo-500 text-[0.95rem] mb-2">
+        <li class="text-indigo-500 mb-2 hidden sm:block">
           <div class="flex items-center justify-between">
             <a href="{% url 'rooms' %}">
               <span> 社群討論版 </span>
@@ -65,9 +74,15 @@
         {% if request.user.is_authenticated %}
         <li>
           <div class="flex items-center justify-between mb-2">
+            {% if request.user.name != None %}
+            <a href="{% url 'user-profile' request.user.id %}">
+              <span class="text-indigo-500">{{request.user.name}}</span>
+            </a>
+            {% else %}
             <a href="{% url 'user-profile' request.user.id %}">
               <span class="text-indigo-500">{{request.user}}</span>
             </a>
+            {% endif %}
           </div>
         </li>
         {% endif %}
@@ -82,9 +97,16 @@
           <li>
             <div class="space-y-1">
               <div class="flex items-center justify-between">
+                {% if friend.name != None %}
+                <a href="{% url 'user-profile' friend.id %}">
+                  <span class="text-indigo-500">{{friend.name}}</span>
+                </a>
+                {% else %}
                 <a href="{% url 'user-profile' friend.id %}">
                   <span class="text-indigo-500">{{friend}}</span>
                 </a>
+                {% endif %}
+
                 <form
                   action="{% url 'create-room' %}"
                   method="POST"
@@ -119,5 +141,42 @@
         </div>
       </ul>
     </div>
+
+    <!-- 設定功能 -->
+    {% if request.user.is_authenticated %}
+    <div
+      class="hidden sm:block bg-gray-100 bottom-0 w-full absolute p-2 text-[0.95rem] text-indigo-500"
+    >
+      <div
+        class="overflow-hidden h-0 transition-all duration-1500 expand-webcontainer flex flex-col space-y-2"
+        id="expand-webcontent"
+      >
+        <div class="flex items-center space-x-2 cursor-pointer">
+          <i class="material-icons text-[1.3rem]"> info_outline </i>
+          <span> 操作說明 </span>
+        </div>
+        <div class="flex items-center space-x-2 cursor-pointer">
+          <i class="material-icons text-[1.3rem]"> help_outline </i>
+          <span> 常見問題 </span>
+        </div>
+        <div class="flex items-center space-x-2 cursor-pointer">
+          <i class="material-icons text-[1.3rem]"> logout </i>
+          <a href="{% url 'logout' %}">登出</a>
+        </div>
+      </div>
+
+      <div
+        class="flex items-center space-x-2 cursor-pointer hover:text-indigo-400"
+        id="expand-websetting"
+      >
+        <i class="material-icons text-[1.3rem]"> settings </i>
+        <span>設定</span>
+      </div>
+    </div>
+    {% endif %}
   </div>
 </section>
+
+{% block scripts %}
+<script src="{% static 'js/webSetting.js' %}"></script>
+{% endblock %}

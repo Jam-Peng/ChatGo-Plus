@@ -12,7 +12,7 @@
       {% include 'base/sidebar.html' %}
     </div>
 
-    <div class="sm:col-span-9 py-4 px-6 space-y-4 border">
+    <div class="sm:col-span-9 py-4 px-6 space-y-4">
       <!--  -->
       <div class="flex flex-col items-center space-y-2">
         <div class="border-2 rounded-full border-indigo-500 w-[7rem]">
@@ -20,7 +20,13 @@
         </div>
 
         <div class="text-center space-y-2">
+          {% if user.name != None %}
+          <span class="text-[1.2rem]">{{user.name}}</span>
+          {% else %}
           <span class="text-[1.2rem]">{{user.username}}</span>
+          {% endif %}
+
+          <!--  -->
           {% if request.user == user%}
           <div
             class="btn-md btn-in"
@@ -41,14 +47,14 @@
         </div>
       </div>
 
-      <div class="flex flex-col pt-2">
+      <div class="flex flex-col pt-1 px-2 ">
         <span class="text-gray-500">介紹</span>
-        <span>{{user.bio}}</span>
+        <span class="relative overflow-y-auto h-[50px]">{{user.bio}}</span>
       </div>
 
-      <div class="space-y-2">
-        <span class="text-gray-500 uppercase">{{user.username}} 社群</span>
-        <div class="space-y-4">
+      <div class="px-2 space-y-1">
+        <span class="text-gray-500 uppercase ">{{user.username}} 社群</span>
+        <div class="space-y-4 relative overflow-y-auto h-[360px] sm:h-[390px] pr-2">
           {% for room in rooms %}
           <!--  -->
           {% if room.is_public == True %}

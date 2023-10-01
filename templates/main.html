@@ -23,11 +23,16 @@
     <main class="container mx-auto">
       <div class="sm:px-10">
         {% include 'navbar.html' %}
-        <!--  -->
 
-        {% block content %}
-        <!-- 顯示內容 -->
-        {% endblock content %}
+        <div>
+          {% block content %}
+          <!-- 顯示內容 -->
+          {% endblock content %}
+        </div>
+
+        <div class="sm:hidden fixed bottom-0 w-full bg-gray-200">
+          {% include 'mobileNavBar.html' %}
+        </div>
       </div>
     </main>
 

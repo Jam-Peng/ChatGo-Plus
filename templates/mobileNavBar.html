@@ -1,0 +1,51 @@
+{% load static %}
+
+<section>
+  <!-- setting 展開的內容 -->
+  <div
+    id="expand-content"
+    class="text-[0.88rem] text-indigo-500 bg-gray-200 overflow-hidden h-0 transition-all duration-1500 expand-container"
+  >
+    <div class="p-4 grid grid-cols-4 gap-2 justify-items-center">
+      <span>操作說明</span>
+      <span>常見問題</span>
+      <span>管理中心</span>
+
+      {% if request.user.is_authenticated %}
+      <a href="{% url 'logout' %}"><span>登出</span></a>
+      {% else %}
+      <a href="{% url 'login' %}">登入</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <div
+    class="grid grid-cols-4 gap-2 px-4 py-2 justify-items-center text-[0.78rem]"
+  >
+    <a
+      href="{% url 'user-profile' request.user.id %}"
+      class="flex flex-col items-center"
+    >
+      <i class="material-icons text-[1.6rem]"> person_pin </i>
+      <span>帳號</span>
+    </a>
+
+    <a href="{% url 'home' %}" class="flex flex-col items-center">
+      <i class="material-icons text-[1.6rem]"> grid_view </i>
+      <span>主頁</span>
+    </a>
+    <a href="{% url 'rooms' %}" class="flex flex-col items-center">
+      <i class="material-icons text-[1.6rem]"> group </i>
+      <span>社群</span>
+    </a>
+
+    <div class="flex flex-col items-center" id="expand-button">
+      <i class="material-icons text-[1.6rem]"> settings </i>
+      <span>設定</span>
+    </div>
+  </div>
+</section>
+
+{% block scripts %}
+<script src="{% static 'js/mobileNavBar.js' %}"></script>
+{% endblock %}

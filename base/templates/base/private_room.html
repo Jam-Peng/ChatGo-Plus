@@ -50,7 +50,11 @@
             </div>
             <div class="space-x-1">
               <span class="text-[.88rem] text-gray-500">房主</span>
+              {% if room.host.name %}
+              <span class="text-indigo-500">{{room.host.name}}</span>
+              {% else %}
               <span class="text-indigo-500">{{room.host.username}}</span>
+              {% endif %}
             </div>
           </div>
 

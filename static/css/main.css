@@ -43,4 +43,10 @@
   .public-rooms-title {
     @apply bg-gray-400 py-2 px-4;
   }
+  .expand-container.expanded {
+    @apply h-[50px];
+  }
+  .expand-webcontainer.expanded {
+    @apply h-[100px];
+  }
 }

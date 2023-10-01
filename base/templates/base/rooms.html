@@ -38,10 +38,10 @@
           <span class="text-gray-500 text-[0.95rem]">社群討論</span>
           <a
             href="{% url 'create-public-room' %}"
-            class="btn-md btn-in flex items-center justify-center"
+            class="btn-md btn-in flex items-center space-x-2"
           >
-            <i class="material-icons flex"> add </i>
-            <span class="text-[0.95rem]">新增社群</span>
+            <i class="material-icons flex"> group_add </i>
+            <span class="text-[0.95rem]">社群</span>
           </a>
         </div>
 
@@ -80,9 +80,19 @@
                   <div class="p-4 space-y-2">
                     <div class="space-y-1">
                       <div class="flex items-center justify-between">
+                        {% if room.host.name %}
                         <a href="{% url 'user-profile' room.host.id %}">
-                          <span class="text-indigo-500">{{room.host}}</span>
+                          <span class="text-indigo-500 text-[0.95rem]"
+                            >{{room.host.name}}</span
+                          >
                         </a>
+                        {% else %}
+                        <a href="{% url 'user-profile' room.host.id %}">
+                          <span class="text-indigo-500 text-[0.95rem]"
+                            >{{room.host}}</span
+                          >
+                        </a>
+                        {% endif %}
                         <span class="text-gray-500 text-xs">
                           {{room.created|date:"m-d"}}
                         </span>

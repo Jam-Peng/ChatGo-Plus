@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 # 擴充自定義使用(管理)者模型
 class User(AbstractUser):
-    name = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
     email = models.EmailField(unique=True, null=True)
     friends = models.ManyToManyField("self", through='Friendship', symmetrical=False)
     bio = models.TextField(null=True)
