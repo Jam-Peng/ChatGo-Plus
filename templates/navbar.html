@@ -25,7 +25,7 @@
           </div>
 
           <div>
-            {% if request.user.name != None %}
+            {% if request.user.name != "None" %}
             <a href="{% url 'user-profile' request.user.id %}">
               <span class="text-indigo-500">{{request.user.name}}</span>
             </a>

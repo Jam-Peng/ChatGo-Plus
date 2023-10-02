@@ -36,6 +36,7 @@
           <div class="p-4">
             <div class="flex items-center justify-between">
               <span class="text-lg"> {{room.name}} </span>
+              <span class="text-lg"> {{room.username}} </span>
               <span class="text-gray-500 text-sm">
                 {% if last_message_time %}
                 <!--  -->
@@ -50,7 +51,7 @@
             </div>
             <div class="space-x-1">
               <span class="text-[.88rem] text-gray-500">房主</span>
-              {% if room.host.name %}
+              {% if room.host.name != "None" %}
               <span class="text-indigo-500">{{room.host.name}}</span>
               {% else %}
               <span class="text-indigo-500">{{room.host.username}}</span>

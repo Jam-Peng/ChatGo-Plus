@@ -1,5 +1,7 @@
+{% load static %}
+
 <section>
-  <div class="p-4">
+  <div class="p-4 relative overflow-auto">
     <div class="pb-4">
       <form action="" method="GET">
         <div class="relative flex flex-wrap justify-center">
@@ -20,7 +22,7 @@
       </form>
     </div>
 
-    <div class="pr-4 relative overflow-y-auto h-[380px]">
+    <div class="pl-2 pr-4 relative overflow-y-auto h-[636px]">
       <ul class="space-y-3 text-[0.95rem]">
         <li>
           <div class="flex items-center justify-between">
@@ -48,5 +50,43 @@
         {% endfor %}
       </ul>
     </div>
+
+    <!-- 設定功能 -->
+    {% if request.user.is_authenticated %}
+    <div
+      class="hidden sm:block bg-gray-100 bottom-0 w-full absolute p-2 text-[0.95rem] text-indigo-500"
+    >
+      <div
+        class="overflow-hidden h-0 transition-all duration-1500 expand-webcontainer flex flex-col space-y-2"
+        id="expand-webcontent"
+      >
+        <div class="flex items-center space-x-2 cursor-pointer">
+          <i class="material-icons text-[1.3rem]"> info_outline </i>
+          <span> 操作說明 </span>
+        </div>
+        <div class="flex items-center space-x-2 cursor-pointer">
+          <i class="material-icons text-[1.3rem]"> help_outline </i>
+          <span> 常見問題 </span>
+        </div>
+        <div class="flex items-center space-x-2 cursor-pointer">
+          <i class="material-icons text-[1.3rem]"> logout </i>
+          <a href="{% url 'logout' %}">登出</a>
+        </div>
+      </div>
+
+      <div
+        class="flex items-center space-x-2 cursor-pointer hover:text-indigo-400"
+        id="expand-websetting"
+      >
+        <i class="material-icons text-[1.3rem]"> settings </i>
+        <span>設定</span>
+      </div>
+    </div>
+    {% endif %}
+    <!--  -->
   </div>
 </section>
+
+{% block scripts %}
+<script src="{% static 'js/webSetting.js' %}"></script>
+{% endblock %}

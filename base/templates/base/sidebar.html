@@ -1,7 +1,7 @@
 {% load static %}
 
 <section>
-  <div class="p-4 sm:relative sm:h-[650px] sm:overflow-auto">
+  <div class="p-4 sm:relative sm:h-[720px] sm:overflow-auto">
     <div class="pb-2">
       <form action="" method="GET">
         <div class="relative flex flex-wrap justify-center">
@@ -22,23 +22,33 @@
       </form>
     </div>
 
-    <div class="p-4 sm:px-2 relative overflow-y-auto h-[600px] sm:h-[550px]">
+    <div class="p-4 sm:px-2 relative overflow-y-auto h-[600px] sm:h-[620px]">
       <ul>
         {% for match_friend in match_friends %}
         <li>
           {% if not match_friend in friends %}
           <div class="flex items-center justify-between mb-2">
-            <a href="{% url 'user-profile' match_friend.id %}">
-              {% if match_friend.name != None %}
-              <span class="hover:text-indigo-500 cursor-pointer">
-                {{match_friend.name}}
-              </span>
-              {% else %}
-              <span class="hover:text-indigo-500 cursor-pointer">
-                {{match_friend}}
-              </span>
-              {% endif %}
-            </a>
+            <div class="flex items-center space-x-4">
+              <div class="border-2 rounded-full border-indigo-500 w-[3.5rem]">
+                <a href="{% url 'user-profile' match_friend.id %}">
+                  <img
+                    src="{{match_friend.avatar.url}}"
+                    class="border rounded-full"
+                  />
+                </a>
+              </div>
+              <a href="{% url 'user-profile' match_friend.id %}">
+                {% if match_friend.name == "None" %}
+                <span class="hover:text-indigo-500 cursor-pointer">
+                  {{match_friend}}
+                </span>
+                {% else %}
+                <span class="hover:text-indigo-500 cursor-pointer">
+                  {{match_friend.username}}
+                </span>
+                {% endif %}
+              </a>
+            </div>
 
             <form action="" method="POST" class="flex">
               {% csrf_token %}
@@ -62,19 +72,27 @@
         </li>
         {% endfor %}
 
-        <li class="text-indigo-500 mb-2 hidden sm:block">
+        <!-- <li class="text-indigo-500 mb-2 hidden sm:block">
           <div class="flex items-center justify-between">
             <a href="{% url 'rooms' %}">
               <span> 社群討論版 </span>
             </a>
           </div>
-        </li>
+        </li> -->
 
         <!-- 判斷使用者是否登入 -->
-        {% if request.user.is_authenticated %}
+        <!-- {% if request.user.is_authenticated %}
         <li>
-          <div class="flex items-center justify-between mb-2">
-            {% if request.user.name != None %}
+          <div class="flex items-center space-x-4 mb-2">
+            <div class="border-2 rounded-full border-indigo-500 w-[3.5rem]">
+              <a href="{% url 'user-profile' request.user.id %}">
+                <img
+                  src="{{request.user.avatar.url}}"
+                  class="border rounded-full"
+                />
+              </a>
+            </div>
+            {% if request.user.name != "None" %}
             <a href="{% url 'user-profile' request.user.id %}">
               <span class="text-indigo-500">{{request.user.name}}</span>
             </a>
@@ -85,7 +103,7 @@
             {% endif %}
           </div>
         </li>
-        {% endif %}
+        {% endif %} -->
 
         <div class="space-y-2">
           <div class="text-sm text-gray-500">
@@ -97,44 +115,62 @@
           <li>
             <div class="space-y-1">
               <div class="flex items-center justify-between">
-                {% if friend.name != None %}
-                <a href="{% url 'user-profile' friend.id %}">
-                  <span class="text-indigo-500">{{friend.name}}</span>
-                </a>
-                {% else %}
-                <a href="{% url 'user-profile' friend.id %}">
-                  <span class="text-indigo-500">{{friend}}</span>
-                </a>
-                {% endif %}
-
-                <form
-                  action="{% url 'create-room' %}"
-                  method="POST"
-                  class="flex"
-                >
-                  {% csrf_token %}
-                  <input
-                    type="hidden"
-                    name="friend_id"
-                    value="{{ friend.id }}"
-                  />
-                  <button
-                    type="submit"
-                    class="text-indigo-500 hover:text-indigo-400"
+                <div class="flex items-center space-x-4">
+                  <div
+                    class="border-2 rounded-full border-indigo-500 w-[3.5rem]"
                   >
-                    <i class="material-icons flex"> sms </i>
-                  </button>
-                </form>
-              </div>
+                    <a href="{% url 'user-profile' friend.id %}">
+                      <img
+                        src="{{friend.avatar.url}}"
+                        class="border rounded-full"
+                      />
+                    </a>
+                  </div>
 
-              {% if friend.last_message %}
-              <div class="text-[0.78rem] flex justify-between text-gray-500">
-                <span>
-                  {{ friend.last_message.content|truncatechars:20 }}
-                </span>
-                <span> {{ friend.last_message_time|date:"H:i" }} </span>
+                  <div class="flex flex-col">
+                    {% if friend.name != "None" %}
+                    <a href="{% url 'user-profile' friend.id %}">
+                      <span class="text-indigo-500">{{friend.name}}</span>
+                    </a>
+                    {% else %}
+                    <a href="{% url 'user-profile' friend.id %}">
+                      <span class="text-indigo-500">{{friend}}</span>
+                    </a>
+                    {% endif %}
+
+                    <span class="text-[0.78rem] text-gray-500 hidden sm:block">
+                      {{ friend.last_message.content|truncatechars:10 }}
+                    </span>
+                    <span class="text-[0.78rem] text-gray-500 sm:hidden">
+                      {{ friend.last_message.content|truncatechars:16 }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col">
+                  <form
+                    action="{% url 'create-room' %}"
+                    method="POST"
+                    class="grid justify-items-end"
+                  >
+                    {% csrf_token %}
+                    <input
+                      type="hidden"
+                      name="friend_id"
+                      value="{{ friend.id }}"
+                    />
+                    <button
+                      type="submit"
+                      class="text-indigo-500 hover:text-indigo-400"
+                    >
+                      <i class="material-icons flex"> sms </i>
+                    </button>
+                  </form>
+                  <span class="text-[0.78rem] text-gray-500">
+                    {{ friend.last_message_time|date:"H:i" }}
+                  </span>
+                </div>
               </div>
-              {% endif %}
             </div>
           </li>
           {% endfor %}

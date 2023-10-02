@@ -216,10 +216,16 @@ def createPrivateRoom(request):
 
         room = Room.objects.filter(slug=room_slug).first()
 
+        roomName = None
+        if friend.name != "None":
+            roomName = friend.name
+        else:
+            roomName = friend.username
+
         if not room:
             # 建立與朋友單一聊天室
             room = Room.objects.create(
-                name = friend.name or friend.username, 
+                name = roomName, 
                 host = request.user,
                 slug = room_slug,
                 is_public = False,
@@ -328,13 +334,20 @@ def updateUser(request):
     form = UserForm(instance=user)          # 將當前使用者資料加到表單上
 
     if request.method == 'POST':
-        form.name = request.POST.get('name')
-        form.username = request.POST.get('username')
-        form.email = request.POST.get('email')
-        form.bio = request.POST.get('bio')
-        form = UserForm(request.POST, request.FILES, instance=user)
+        user.name = request.POST.get('name')
+        user.username = request.POST.get('username')
+        user.email = request.POST.get('email')
+        user.bio = request.POST.get('bio')
 
-        form.save()
+        # 先判斷目前使用的照片與沒有更新照片的狀況，再判斷有照片要更新時的狀況
+        if user.avatar.name != 'avatar.png' and request.FILES == {}:
+            user.avatar = user.avatar
+        elif 'avatar' in request.FILES:
+            if user.avatar.name != 'avatar.png':
+                user.avatar.delete()
+            user.avatar = request.FILES['avatar']
+
+        user.save()
         return redirect('user-profile', pk=user.id)
     
     return render(request, 'base/update_user.html', {'form': form, 'user': user})

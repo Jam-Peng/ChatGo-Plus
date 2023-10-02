@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 # 擴充自定義使用(管理)者模型
 class User(AbstractUser):
-    name = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=200, default="None", null=True, blank=True)
     email = models.EmailField(unique=True, null=True)
     friends = models.ManyToManyField("self", through='Friendship', symmetrical=False)
     bio = models.TextField(null=True)
@@ -23,7 +23,7 @@ class Friendship(models.Model):
 
     class Meta:
         unique_together = ['from_user', 'to_user']
-        ordering = ['-chat_count', '-updated']           
+        ordering = ['-updated', '-chat_count']           
 
     def __str__(self):
         return f"{self.from_user.username} -> {self.to_user.username}"

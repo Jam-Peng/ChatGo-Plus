@@ -1,10 +1,13 @@
 <section>
   <div class="flex flex-col space-y-4 py-4 px-6">
     <div class="flex flex-row items-center justify-between px-4">
-      <div class="text-[0.95rem] text-gray-500">
-        <span>社群討論</span>
-        <span class="text-indigo-500">{{rooms.count}} </span>
+      <div class="text-[0.95rem] text-indigo-500">
+        <a href="{% url 'rooms' %}">
+          <span> 社群討論 </span>
+        </a>
+        <span>{{rooms.count}} </span>
       </div>
+
       <a
         href="{% url 'create-public-room' %}"
         class="btn-md btn-in flex items-center space-x-2"
