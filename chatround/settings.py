@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-zbuv@*ejp6$5l$hw^usmc=^kw8vq66&3j_8a%u00ke%3f(3w8q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'https://chatgoplus.onrender.com']
 
 # 使用內建登出功能
 LOGOUT_REDIRECT_URL = '/'  
@@ -156,7 +156,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+MEDIA_ROOT = BASE_DIR / 'static/images'
 
 
 # 靜態文件收集設定
