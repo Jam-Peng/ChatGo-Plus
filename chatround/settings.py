@@ -59,6 +59,9 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+    # 靜態文件的中介器
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = "chatround.urls"
@@ -100,6 +103,17 @@ DATABASES = {
     }
 }
 
+# 遠端
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "chatgoplus",
+        "USER": "pengroot",
+        "PASSWORD": "11111111",
+        "HOST": "chatgoplus.ccftqa8uxqsd.us-east-1.rds.amazonaws.com",
+        "PORT": "3306",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -142,8 +156,12 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
-# MEDIA_ROOT = BASE_DIR / 'static/images'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
+
+
+# 靜態文件收集設定
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.StaticFilesStorage"
 
 
 # Default primary key field type
