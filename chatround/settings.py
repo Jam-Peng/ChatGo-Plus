@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-zbuv@*ejp6$5l$hw^usmc=^kw8vq66&3j_8a%u00ke%3f(3w8q
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # 使用內建登出功能
 LOGOUT_REDIRECT_URL = '/'  
@@ -78,6 +78,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = "chatround.wsgi.application"
 ASGI_APPLICATION = "chatround.asgi.application"
@@ -149,3 +150,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/images')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
