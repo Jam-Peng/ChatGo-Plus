@@ -38,9 +38,9 @@
                 </a>
               </div>
               <a href="{% url 'user-profile' match_friend.id %}">
-                {% if match_friend.name == "None" %}
+                {% if match_friend.name != "None" %}
                 <span class="hover:text-indigo-500 cursor-pointer">
-                  {{match_friend}}
+                  {{match_friend.name}}
                 </span>
                 {% else %}
                 <span class="hover:text-indigo-500 cursor-pointer">

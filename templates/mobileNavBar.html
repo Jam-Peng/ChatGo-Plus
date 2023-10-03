@@ -34,10 +34,18 @@
       <i class="material-icons text-[1.6rem]"> grid_view </i>
       <span>主頁</span>
     </a>
-    <a href="{% url 'rooms' %}" class="flex flex-col items-center">
-      <i class="material-icons text-[1.6rem]"> group </i>
-      <span>社群</span>
-    </a>
+
+    <div class="relative">
+      <a href="{% url 'rooms' %}" class="flex flex-col items-center">
+        <i class="material-icons text-[1.6rem]"> group </i>
+        <span>社群</span>
+      </a>
+      <div
+        class="bg-indigo-500 absolute z-30 -right-4 -top-1 text-sm text-gray-100 w-[20px] h-[20px] rounded-full flex justify-center items-center"
+      >
+        {{rooms.count}}
+      </div>
+    </div>
 
     <div class="flex flex-col items-center" id="expand-button">
       <i class="material-icons text-[1.6rem]"> settings </i>

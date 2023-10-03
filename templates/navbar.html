@@ -1,7 +1,7 @@
 {% load static %}
 
 <section class="">
-  <div class="flex items-center justify-between px-4 sm:px-6 py-4">
+  <div class="flex items-center justify-between px-7 sm:px-6 py-4">
     <div>
       <a href="{% url 'home' %}" class="flex items-center space-x-2">
         <img src="{% static 'images/logo.png' %}" class="w-9" />
@@ -12,7 +12,14 @@
     <div class="sm:pr-4">
       {% if request.user.is_authenticated %}
       <div class="grid grid-cols-1 gap-x-4 sm:gap-x-4">
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center space-x-4">
+          <a href="{% url 'home' %}" class="hidden sm:block text-indigo-500">
+            <i class="material-icons text-[1.6rem] flex"> sms </i>
+          </a>
+          <a href="{% url 'rooms' %}" class="hidden sm:block text-indigo-500">
+            <i class="material-icons text-[1.6rem] flex"> group </i>
+          </a>
+
           <div
             class="border-2 rounded-full border-indigo-500 w-[2.5rem] md:w-[2.4rem]"
           >
@@ -24,7 +31,7 @@
             </a>
           </div>
 
-          <div>
+          <!-- <div>
             {% if request.user.name != "None" %}
             <a href="{% url 'user-profile' request.user.id %}">
               <span class="text-indigo-500">{{request.user.name}}</span>
@@ -34,7 +41,7 @@
               <span class="text-indigo-500">{{request.user}}</span>
             </a>
             {% endif %}
-          </div>
+          </div> -->
         </div>
       </div>
       {% else %}

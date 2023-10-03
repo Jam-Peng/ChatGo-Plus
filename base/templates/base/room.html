@@ -35,10 +35,15 @@
             </div>
             <div class="space-x-1">
               <span class="text-[.88rem] text-gray-500">房主</span>
-              {% if room.host.name %}
-              <span class="text-indigo-500">{{room.host.name}}</span>
+              <a href="{% url 'user-profile' room.host.id %}">
+                <span class="text-indigo-500">{{room.host.username}}</span>
+              </a>
+
+              {% if room.host.name != "None" %}
+              <span class="text-gray-500 text-[.88rem]">
+                {{room.host.name}}
+              </span>
               {% endif %}
-              <span class="text-indigo-500">{{room.host.username}}</span>
             </div>
           </div>
           <div class="relative overflow-y-auto h-[85px] sm:h-[80px]">
