@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-zbuv@*ejp6$5l$hw^usmc=^kw8vq66&3j_8a%u00ke%3f(3w8q"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', 'https://chatgoplus.onrender.com']
 
