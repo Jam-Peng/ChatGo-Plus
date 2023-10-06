@@ -18,8 +18,8 @@ class Friendship(models.Model):
     from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_friend_set')
     to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_friend_set')
     chat_count = models.PositiveIntegerField(default=0)     # 聊天次數
-    created = models.DateTimeField(auto_now_add=True)       # 創建時間
-    updated = models.DateTimeField(auto_now=True)           # 更新時間
+    created = models.DateTimeField(auto_now_add=True)       
+    updated = models.DateTimeField(auto_now=True)          
 
     class Meta:
         unique_together = ['from_user', 'to_user']
