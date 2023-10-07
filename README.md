@@ -15,14 +15,14 @@
 <p align="center">
   Web Home
 </p>
-<img src="./assets/web_Home.jpg">
+<img src="./assets/web_home.jpg">
 </td> 
 <td width="50%">
 <br>
 <p align="center">
   Web Chat 
 </p>
-<img src="./assets/Web_chat.jpg">
+<img src="./assets/web_chat.jpg">
 </td>
 </tr>
 <tr>
@@ -33,7 +33,7 @@
   App Home
 </p>
 <center>
-<img src="./assets/app_Home.jpg" width='60%'>
+<img src="./assets/app_home.jpg" width='60%'>
 </center>
 </td> 
 <td width="50%">
@@ -42,7 +42,7 @@
   App Chat
 </p>
 <center>
-<img src="./assets/App_chat.jpg" width='60%'>
+<img src="./assets/app_chat.jpg" width='60%'>
 </center>
 </td>
 </tr>
