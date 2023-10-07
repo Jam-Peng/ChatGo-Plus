@@ -88,5 +88,18 @@
 </section>
 
 {% block scripts %}
-<script src="{% static 'js/webSetting.js' %}"></script>
+<script>
+  const expandWebsetting = document.getElementById("expand-websetting");
+  const expandWebcontent = document.getElementById("expand-webcontent");
+
+  if (expandWebsetting != null) {
+    expandWebsetting.addEventListener("click", () => {
+      if (expandWebcontent.classList.contains("expanded")) {
+        expandWebcontent.classList.remove("expanded");
+      } else {
+        expandWebcontent.classList.add("expanded");
+      }
+    });
+  }
+</script>
 {% endblock %}
