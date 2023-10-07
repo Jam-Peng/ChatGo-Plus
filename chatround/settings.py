@@ -103,17 +103,6 @@ DATABASES = {
     }
 }
 
-# 遠端
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "chatgoplus",
-#         "USER": "pengroot",
-#         "PASSWORD": "11111111",
-#         "HOST": "chatgoplus.ccftqa8uxqsd.us-east-1.rds.amazonaws.com",
-#         "PORT": "3306",
-#     }
-# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
