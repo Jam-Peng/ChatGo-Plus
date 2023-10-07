@@ -33,7 +33,7 @@
   App Home
 </p>
 <center>
-<img src="./assets/app_Home.jpg" width='65%'>
+<img src="./assets/app_Home.jpg" width='60%'>
 </center>
 </td> 
 <td width="50%">
@@ -42,7 +42,7 @@
   App Chat
 </p>
 <center>
-<img src="./assets/App_chat.jpg" width='65%'>
+<img src="./assets/App_chat.jpg" width='60%'>
 </center>
 </td>
 </tr>
