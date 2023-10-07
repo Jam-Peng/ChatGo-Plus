@@ -13,16 +13,37 @@
 &nbsp; 
 <br>
 <p align="center">
-  Web 
+  Web Home
 </p>
-<img src="./assets/web.jpg">
+<img src="./assets/web-Home.jpg">
 </td> 
-<td width="30%">
+<td width="50%">
 <br>
 <p align="center">
-  App
+  Web Room 
 </p>
-<img src="./assets/app.jpg">
+<img src="./assets/Web-chat.jpg">
+</td>
+</tr>
+<tr>
+<td width="50%">      
+&nbsp; 
+<br>
+<p align="center">
+  App Home
+</p>
+<center>
+<img src="./assets/app-Home.jpg" width='65%'>
+</center>
+</td> 
+<td width="50%">
+<br>
+<p align="center">
+  App Room 
+</p>
+<center>
+<img src="./assets/App-chat.jpg" width='65%'>
+</center>
 </td>
 </tr>
 </table>
@@ -31,7 +52,6 @@
 
 ## 專案說明
 以聊天室為主題設計，模擬聊天時即時傳遞文字至群組的功能。
-
 
 #
 ### 使用環境
